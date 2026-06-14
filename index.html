@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Levitation Dynamics Findings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-main: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --accent-glow: #00d4ff;
+            --card-bg: rgba(20, 20, 20, 0.6);
+            --card-border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 212, 255, 0.05), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(138, 43, 226, 0.05), transparent 25%);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(90deg, #ffffff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+            letter-spacing: -1px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 1rem auto 0;
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+        }
+
+        .viz-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .viz-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.5), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .viz-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.1);
+        }
+
+        .viz-card:hover::before {
+            opacity: 1;
+        }
+
+        .viz-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #fff;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .viz-title::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-glow);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .img-container {
+            flex-grow: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .viz-card:hover .img-container img {
+            transform: scale(1.03);
+        }
+
+        /* Full width for specific charts if needed */
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Levitation Dynamics Visualizations</h1>
+        <p class="subtitle">Comprehensive overview of experimental parameters, material performance, and success metrics derived from our state-of-the-art test facilities.</p>
+        <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1.5rem;">
+            <a href="3d_scatter.html" target="_blank" style="display: inline-block; padding: 12px 24px; background: rgba(0, 212, 255, 0.1); border: 1px solid var(--accent-glow); color: var(--accent-glow); text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);">
+                Explore Interactive 3D Scatter Plot 🚀
+            </a>
+            <a href="levitation_cleaned_experiments.csv" download style="display: inline-block; padding: 12px 24px; background: rgba(138, 43, 226, 0.1); border: 1px solid #8a2be2; color: #d19eff; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.2);">
+                Download Raw Dataset 📊
+            </a>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        
+        <!-- Chart 1 -->
+        <div class="viz-card">
+            <h2 class="viz-title">Levitation Altitude Distribution</h2>
+            <div class="img-container">
+                <img src="altitude_distribution.png" alt="Histogram showing the distribution of levitation altitudes">
+            </div>
+        </div>
+
+        <!-- Chart 2 -->
+        <div class="viz-card">
+            <h2 class="viz-title">Material vs. Altitude Performance</h2>
+            <div class="img-container">
+                <img src="material_altitude_bar.png" alt="Bar chart comparing different materials by average altitude achieved">
+            </div>
+        </div>
+
+        <!-- Chart 3 -->
+        <div class="viz-card">
+            <h2 class="viz-title">Feature Correlation Heatmap</h2>
+            <div class="img-container">
+                <img src="correlation_heatmap.png" alt="Heatmap showing correlation between various experimental parameters">
+            </div>
+        </div>
+
+        <!-- Chart 4 -->
+        <div class="viz-card">
+            <h2 class="viz-title">Lab Performance Comparison</h2>
+            <div class="img-container">
+                <img src="lab_comparison_boxplot.png" alt="Box plot comparing performance across different research labs">
+            </div>
+        </div>
+
+        <!-- Chart 5 -->
+        <div class="viz-card full-width">
+            <h2 class="viz-title">Power Consumption vs. Altitude</h2>
+            <div class="img-container">
+                <img src="power_vs_altitude_scatter.png" alt="Scatter plot demonstrating the relationship between power and altitude">
+            </div>
+        </div>
+
+        <!-- Chart 6 -->
+        <div class="viz-card full-width">
+            <h2 class="viz-title">Success Rate Trend</h2>
+            <div class="img-container">
+                <img src="success_rate_trend.png" alt="Line chart illustrating the experiment success rate over time">
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>
